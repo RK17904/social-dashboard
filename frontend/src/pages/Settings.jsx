@@ -7,14 +7,23 @@ export default function Settings({ accounts, setAccounts }) {
 
   // --- APPEARANCE STATE ---
   const [theme, setTheme] = useState('dark');
-  const [accentColor, setAccentColor] = useState('#7052FF'); // Default Purple
+  const [accentColor, setAccentColor] = useState(() => {
+    // Read the current CSS variable from the browser
+    const currentCSSColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-primary').trim();
+    // Return that color, or default to purple if it can't find one
+    return currentCSSColor || '#7052FF';
+  });// Default Purple
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
   
   const colorSwatches = [
     { name: 'Purple (Default)', hex: '#7052FF' },
-    { name: 'Emerald', hex: '#10B981' },
+    { name: 'Emerald', hex: '#34C759' },
     { name: 'Ocean Blue', hex: '#0EA5E9' },
     { name: 'Sunset Orange', hex: '#F97316' },
-    { name: 'Rose', hex: '#F43F5E' }
+    { name: 'Rose', hex: '#FFC107' }
   ];
 
   // Dynamically change the CSS variable for the whole app!
@@ -112,7 +121,7 @@ export default function Settings({ accounts, setAccounts }) {
               </div>
 
               <div>
-                <label style={{ display: 'block', color: 'var(--text-secondary)', fontWeight: '600', marginBottom: '15px' }}>Interface Theme (Demo Toggle)</label>
+                <label style={{ display: 'block', color: 'var(--text-secondary)', fontWeight: '600', marginBottom: '15px' }}>Interface Theme</label>
                 <div style={{ display: 'flex', gap: '15px' }}>
                   <button onClick={() => setTheme('light')} style={{ flex: 1, padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', backgroundColor: theme === 'light' ? 'rgba(112, 82, 255, 0.1)' : 'var(--bg-main)', border: `2px solid ${theme === 'light' ? 'var(--accent-primary)' : 'var(--border-color)'}`, borderRadius: '12px', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: '600' }}>
                     <Sun size={28} color={theme === 'light' ? 'var(--accent-primary)' : 'var(--text-secondary)'} />

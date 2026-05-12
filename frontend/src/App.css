@@ -680,3 +680,15 @@ body {
   transform: translateY(-2px);
   border-color: var(--accent-primary);
 }
+
+/* =========================================
+   LIGHT MODE OVERRIDES
+   ========================================= */
+[data-theme="light"] {
+  --bg-main: #F3F4F6;         /* Light gray background */
+  --bg-card: #FFFFFF;         /* Pure white cards */
+  --text-primary: #111827;    /* Near-black text for high contrast */
+  --text-secondary: #6B7280;  /* Medium gray for subtitles */
+  --border-color: #E5E7EB;    /* Very soft gray borders */
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05); /* Softer drop shadows */
+}
