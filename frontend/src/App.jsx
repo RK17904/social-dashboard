@@ -11,6 +11,7 @@ import MainCharts from './components/dashboard/MainCharts';
 import ContentPieChart from './components/dashboard/ContentPieChart';
 import DataUploader from './components/DataUploader'; 
 import ActivityFeed from './components/dashboard/ActivityFeed'; 
+import Settings from './pages/Settings'; 
 
 function InsightsBanner({ platform }) {
   return (
@@ -30,6 +31,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [isCollapsed, setIsCollapsed] = useState(false);
   
+  // This state is now controlled by your Settings page too!
   const [accounts, setAccounts] = useState([
     { name: 'Sumathi Universal', platforms: ['Facebook', 'Instagram', 'LinkedIn'] },
     { name: 'Sumathi Ventures', platforms: ['Facebook', 'Instagram'] },
@@ -46,18 +48,14 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(true);
   const [deltas, setDeltas] = useState({ views: 0, visits: 0, viewers: 0, followers: 0, interactions: 0 });
 
-  // --- NEW: THE CENTRAL ACTIVITY STATE ---
-  // We start with a few fake "system" logs so the page isn't empty on load
   const [activities, setActivities] = useState([
     { id: 2, type: 'system', title: 'Automated Sync', desc: 'System automatically refreshed LinkedIn metrics for Octagon Engineering.', time: '2 hours ago', user: 'System Agent', status: 'info' },
-    { id: 3, type: 'team', title: 'New User Added', desc: 'Sent dashboard invite to Admin User (Social Media Manager).', time: 'May 10, 2026', user: 'Admin User', status: 'info' }
+    { id: 3, type: 'team', title: 'New User Added', desc: 'Sent dashboard invite to John Doe (Social Media Manager).', time: 'May 10, 2026', user: 'Admin User', status: 'info' }
   ]);
 
-  // --- NEW: THE FUNCTION THAT LOGS NEW UPLOADS ---
   const handleUploadSuccess = (uploadedCompany, uploadedPlatform, uploadedMetric) => {
-    // 1. Create a brand new log entry
     const newActivity = {
-      id: Date.now(), // Unique ID
+      id: Date.now(),
       type: 'upload',
       title: 'Data Upload Successful',
       desc: `Raw CSV data for ${uploadedPlatform} ${uploadedMetric} was securely uploaded to ${uploadedCompany}'s database.`,
@@ -65,11 +63,7 @@ function App() {
       user: 'Admin User', 
       status: 'success'
     };
-
-    // 2. Push it to the TOP of the activities list
     setActivities([newActivity, ...activities]);
-    
-    // 3. Re-fetch the dashboard data to show the new numbers
     fetchDashboardData();
   };
 
@@ -105,10 +99,20 @@ function App() {
     }
   };
 
+  // If a company is deleted in settings and it was the currently selected one, we need to reset the selection
+  useEffect(() => {
+    const currentAccountExists = accounts.find(acc => acc.name === selectedCompany);
+    if (!currentAccountExists) {
+        setSelectedCompany(accounts[0].name);
+        setSelectedPlatform(accounts[0].platforms[0]);
+    }
+  }, [accounts]);
+
   useEffect(() => { fetchDashboardData(); }, [selectedCompany, selectedPlatform, dateRange]);
 
   const handleNextSlide = () => {
     const currentAccount = accounts.find(acc => acc.name === selectedCompany);
+    if (!currentAccount) return;
     const currentPlatformIndex = currentAccount.platforms.indexOf(selectedPlatform);
     if (currentPlatformIndex < currentAccount.platforms.length - 1) setSelectedPlatform(currentAccount.platforms[currentPlatformIndex + 1]);
     else {
@@ -119,6 +123,7 @@ function App() {
 
   const handlePrevSlide = () => {
     const currentAccount = accounts.find(acc => acc.name === selectedCompany);
+    if (!currentAccount) return;
     const currentPlatformIndex = currentAccount.platforms.indexOf(selectedPlatform);
     if (currentPlatformIndex > 0) setSelectedPlatform(currentAccount.platforms[currentPlatformIndex - 1]);
     else {
@@ -169,14 +174,18 @@ function App() {
 
           ) : currentPage === 'upload' ? (
             <div className="upload-page page-transition" style={{ padding: '20px' }}>
-              {/* Notice we are passing the new handleUploadSuccess function here! */}
               <DataUploader onUploadSuccess={handleUploadSuccess} onBack={() => setCurrentPage('dashboard')} />
             </div>
 
           ) : currentPage === 'activity' ? (
             <div className="activity-page page-transition" style={{ padding: '20px' }}>
-              {/* Notice we are passing the live activities list into the feed! */}
               <ActivityFeed activities={activities} />
+            </div>
+
+          /* --- NEW SETTINGS ROUTE --- */
+          ) : currentPage === 'settings' ? (
+            <div className="settings-page page-transition" style={{ padding: '20px' }}>
+              <Settings accounts={accounts} setAccounts={setAccounts} />
             </div>
 
           ) : (

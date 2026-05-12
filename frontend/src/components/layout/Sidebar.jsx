@@ -32,7 +32,10 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, currentPage, setC
           </div>          
           
           <div className="nav-item"><UserPlus size={20} /><span>Add User</span></div>
-          <div className="nav-item"><Settings size={20} /><span>Settings</span></div>
+          
+          <div className={`nav-item ${currentPage === 'settings' ? 'active' : ''}`} onClick={() => setCurrentPage('settings')}>
+            <Settings size={20} /><span>Settings</span>
+          </div>
         </div>
       </div>
 
