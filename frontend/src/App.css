@@ -697,28 +697,44 @@ body {
    AUTHENTICATION PAGE STYLES (LOGIN)
    ========================================= */
 .auth-wrapper {
+  position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  /* ADD YOUR BACKGROUND IMAGE HERE */
-  background-image: url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2000&auto=format&fit=crop');
-  background-size: cover;
-  background-position: center;
   font-family: 'Inter', sans-serif;
+  overflow: hidden; /* Prevents the video from causing scrollbars */
+}
+
+/* NEW: Streches the video to cover the screen */
+.auth-video-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures it fills the screen without stretching */
+  z-index: 0;
+}
+
+/* NEW: Darkens the video so the white login card is easy to read */
+.auth-video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2); /* Adjust the 0.2 up to 0.5 if your video is very bright */
+  z-index: 1;
 }
 
 /* THE GLASSMORPHISM CONTAINER */
 .auth-container {
-  /* Transparent white background */
   background-color: rgba(255, 255, 255, 0.7); 
-  /* The magic blur effect */
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  /* White border to enhance the glass look */
   border: 1px solid rgba(255, 255, 255, 0.5);
-  
   border-radius: 20px;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
   position: relative;
@@ -729,8 +745,8 @@ body {
   opacity: 0;
   transform: translateY(40px);
   transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2; /* Ensures the card sits ON TOP of the video and overlay */
 }
-
 .auth-container.mounted {
   opacity: 1;
   transform: translateY(0);

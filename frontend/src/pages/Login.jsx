@@ -41,8 +41,17 @@ export default function Login({ onLogin }) {
 
   return (
     <div className="auth-wrapper">
-      <div className={`auth-container ${isAdminView ? 'right-panel-active' : ''} ${mounted ? 'mounted' : ''}`}>
-        
+{/* 1. THE BACKGROUND VIDEO */}
+      <video autoPlay loop muted playsInline className="auth-video-bg">
+        <source src="/login.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+      {/* 2. A SUBTLE DARK OVERLAY (Helps the glass card pop!) */}
+      <div className="auth-video-overlay"></div>
+
+      {/* 3. YOUR EXISTING LOGIN CARD */}
+      <div className={`auth-container ${isAdminView ? 'right-panel-active' : ''} ${mounted ? 'mounted' : ''}`}>        
         {/* =========================================
             FORM 1: USER LOGIN (LEFT SIDE - DEFAULT)
             ========================================= */}
