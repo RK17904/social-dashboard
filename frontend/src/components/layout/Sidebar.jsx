@@ -1,6 +1,5 @@
 import React from 'react';
-import { LayoutDashboard, UploadCloud, Activity, UserPlus, Settings, Menu, MonitorPlay, Clock } from 'lucide-react'; 
-
+import { LayoutDashboard, UploadCloud, Activity, Settings, Menu, MonitorPlay, Clock, Shield, User, Users } from 'lucide-react';
 export default function Sidebar({ isCollapsed, setIsCollapsed, currentPage, setCurrentPage }) {
   // Generate a live timestamp for the demo
   const syncTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -31,7 +30,9 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, currentPage, setC
             <Activity size={20} /><span>Activity</span>
           </div>          
           
-          <div className="nav-item"><UserPlus size={20} /><span>Add User</span></div>
+          <div className={`nav-item ${currentPage === 'users' ? 'active' : ''}`} onClick={() => setCurrentPage('users')}>
+             <Users size={20} /><span>Team</span>
+           </div>
           
           <div className={`nav-item ${currentPage === 'settings' ? 'active' : ''}`} onClick={() => setCurrentPage('settings')}>
             <Settings size={20} /><span>Settings</span>

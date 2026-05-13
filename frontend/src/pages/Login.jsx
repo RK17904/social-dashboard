@@ -151,7 +151,7 @@ export default function Login({ onLogin }) {
                   <p>Marketing Dashboard</p>
                 </div>
               </div>
-              <h3>Administrator<br/>Access</h3>
+              <h3>Administrator<br/> Access</h3>
               <p>Need to upload data, manage portfolios, or review system logs?</p>
               <button className="auth-ghost-btn" onClick={toggleView}>Switch to Admin</button>
             </div>

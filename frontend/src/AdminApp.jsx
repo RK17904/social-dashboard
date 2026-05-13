@@ -11,6 +11,7 @@ import MainCharts from './components/dashboard/MainCharts';
 import ContentPieChart from './components/dashboard/ContentPieChart';
 import DataUploader from './components/DataUploader'; 
 import ActivityFeed from './components/dashboard/ActivityFeed'; 
+import UserManagement from './components/dashboard/UserManagement';
 import Settings from './pages/Settings';
 
 function InsightsBanner({ platform }) {
@@ -34,8 +35,8 @@ export default function AdminApp({ onLogout }) {
   
   const [accounts, setAccounts] = useState([
     { name: 'Sumathi Universal', platforms: ['Facebook', 'Instagram', 'LinkedIn'] },
-    { name: 'Sumathi Ventures', platforms: ['Facebook', 'Instagram'] },
-    { name: 'Octagon Engineering', platforms: ['Facebook', 'LinkedIn'] }
+    { name: 'Sumathi Ventures', platforms: ['Facebook', 'Instagram', 'LinkedIn'] },
+    { name: 'Octagon Engineering', platforms: ['Facebook', 'Instagram', 'LinkedIn'] }
   ]);
 
   const [selectedCompany, setSelectedCompany] = useState(accounts[0].name);
@@ -180,6 +181,11 @@ export default function AdminApp({ onLogout }) {
           ) : currentPage === 'activity' ? (
             <div className="activity-page page-transition" style={{ padding: '20px' }}>
               <ActivityFeed activities={activities} />
+            </div>
+
+          ) : currentPage === 'users' ? (
+            <div className="users-page page-transition" style={{ padding: '20px' }}>
+              <UserManagement />
             </div>
 
           ) : currentPage === 'settings' ? (

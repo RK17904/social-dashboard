@@ -33,8 +33,8 @@ export default function UserApp({ onLogout }) {
   // Hardcoded portfolio for the user (they cannot edit this)
   const accounts = [
     { name: 'Sumathi Universal', platforms: ['Facebook', 'Instagram', 'LinkedIn'] },
-    { name: 'Sumathi Ventures', platforms: ['Facebook', 'Instagram'] },
-    { name: 'Octagon Engineering', platforms: ['Facebook', 'LinkedIn'] }
+    { name: 'Sumathi Ventures', platforms: ['Facebook', 'Instagram', 'LinkedIn'] },
+    { name: 'Octagon Engineering', platforms: ['Facebook', 'Instagram', 'LinkedIn'] }
   ];
 
   const [selectedCompany, setSelectedCompany] = useState(accounts[0].name);
