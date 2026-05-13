@@ -6,7 +6,9 @@ export default function Settings({ accounts, setAccounts }) {
   const [toast, setToast] = useState(false);
 
   // --- APPEARANCE STATE ---
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState(() => {
+    return document.documentElement.getAttribute('data-theme') || 'light';
+  });
   const [accentColor, setAccentColor] = useState(() => {
     // Read the current CSS variable from the browser
     const currentCSSColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-primary').trim();
