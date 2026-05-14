@@ -6,12 +6,15 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(express.json({ limit: '10mb' })); 
+app.use(express.json({ limit: '10mb' }));
 
-// --- THIS IS THE MISSING LINK ---
-// We tell the server to route any request hitting '/api/upload' to your routes file
+// Existing Upload Routes
 const uploadRoutes = require('./routes/uploadRoutes');
 app.use('/api/upload', uploadRoutes);
+
+// --- ADD THESE TWO LINES FOR USER MANAGEMENT ---
+const userRoutes = require('./routes/UserRouters');
+app.use('/api/users', userRoutes);
 
 // Test Route
 app.get('/api/test', (req, res) => {

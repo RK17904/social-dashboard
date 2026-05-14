@@ -49,10 +49,35 @@ export default function AdminApp({ onLogout }) {
   const [isPlaying, setIsPlaying] = useState(true);
   const [deltas, setDeltas] = useState({ views: 0, visits: 0, viewers: 0, followers: 0, interactions: 0 });
 
-  const [activities, setActivities] = useState([
-    { id: 2, type: 'system', title: 'Automated Sync', desc: 'System automatically refreshed LinkedIn metrics for Octagon Engineering.', time: '2 hours ago', user: 'System Agent', status: 'info' },
-    { id: 3, type: 'team', title: 'New User Added', desc: 'Sent dashboard invite to John Doe (Social Media Manager).', time: 'May 10, 2026', user: 'Admin User', status: 'info' }
-  ]);
+  // 1. UPGRADE STATE TO USE LOCAL STORAGE
+  const [activities, setActivities] = useState(() => {
+    const savedLogs = localStorage.getItem('dashboard_activities');
+    if (savedLogs) return JSON.parse(savedLogs);
+    // Default fallback log
+    return [
+      { id: Date.now(), type: 'system', title: 'System Initialized', desc: 'Dashboard tracking services are online.', time: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }), user: 'System Agent', status: 'info' }
+    ];
+  });
+
+  // 2. AUTO-SAVE LOGS ON CHANGE
+  useEffect(() => {
+    localStorage.setItem('dashboard_activities', JSON.stringify(activities));
+  }, [activities]);
+
+  // 3. THE UNIVERSAL LOGGER FUNCTION
+  const logActivity = (type, title, desc, status = 'info') => {
+    const newLog = {
+      id: Date.now(),
+      type,
+      title,
+      desc,
+      time: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+      user: 'Admin User',
+      status
+    };
+    // Add new log to the top, keep only the latest 50 logs to prevent lag
+    setActivities(prevLogs => [newLog, ...prevLogs].slice(0, 50)); 
+  };;
 
   const handleUploadSuccess = (uploadedCompany, uploadedPlatform, uploadedMetric) => {
     const newActivity = {
@@ -178,16 +203,16 @@ export default function AdminApp({ onLogout }) {
               <DataUploader onUploadSuccess={handleUploadSuccess} onBack={() => setCurrentPage('dashboard')} />
             </div>
 
+          ) : currentPage === 'users' ? (
+            <div className="users-page page-transition" style={{ padding: '20px' }}>
+              <UserManagement onActivity={logActivity} /> 
+            </div>
+
           ) : currentPage === 'activity' ? (
             <div className="activity-page page-transition" style={{ padding: '20px' }}>
               <ActivityFeed activities={activities} />
             </div>
-
-          ) : currentPage === 'users' ? (
-            <div className="users-page page-transition" style={{ padding: '20px' }}>
-              <UserManagement />
-            </div>
-
+            
           ) : currentPage === 'settings' ? (
             <div className="settings-page page-transition" style={{ padding: '20px' }}>
               <Settings accounts={accounts} setAccounts={setAccounts} />

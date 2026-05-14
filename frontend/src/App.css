@@ -838,6 +838,29 @@ body {
   margin-top: 0;
 }
 
+/* =========================================
+   FIX: FORCE DARK TEXT ON LOGIN INPUTS
+   ========================================= */
+.auth-wrapper .input-wrapper input {
+  color: #111827 !important; /* Forces the typed text to stay dark */
+}
+
+.auth-wrapper .input-wrapper input::placeholder {
+  color: #6B7280 !important; /* Forces the placeholder text to stay gray */
+  opacity: 1; 
+}
+
+.auth-wrapper .input-icon {
+  color: #6B7280 !important; /* Ensures the Mail and Lock icons stay visible */
+}
+
+/* Also ensure the error messages remain readable if dark mode is active */
+.auth-wrapper .auth-error {
+  background-color: #FEE2E2 !important;
+  color: #DC2626 !important;
+  border-color: #FCA5A5 !important;
+}
+
 /* INPUTS */
 .input-group {
   margin-bottom: 15px;
@@ -977,13 +1000,13 @@ body {
   align-items: center;
   gap: 12px;
   margin-bottom: 40px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0);
   padding: 10px 15px;
   border-radius: 12px;
   backdrop-filter: blur(5px);
 }
 .overlay-logo {
-  height: 35px;
+  height: 130px;
   width: auto;
   border-radius: 4px;
 }

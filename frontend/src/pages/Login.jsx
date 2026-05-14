@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Mail, Lock, ShieldCheck, User } from 'lucide-react';
+import axios from 'axios';
 
 export default function Login({ onLogin }) {
   // State to control the sliding animation (Admin is now the right panel)
@@ -21,23 +22,32 @@ export default function Login({ onLogin }) {
     setError('');
   };
 
-  const handleLoginSubmit = (e, expectedRole) => {
-    e.preventDefault();
-    setError('');
+  const handleLoginSubmit = async (e, expectedRole) => {
+  e.preventDefault();
+  setError('');
 
-    if (!email || !password) {
-      setError('Please enter both email and password.');
-      return;
-    }
+  if (!email || !password) {
+    setError('Please enter both email and password.');
+    return;
+  }
 
-    if (expectedRole === 'admin' && email === 'admin@company.com' && password === 'admin123') {
-      onLogin('admin');
-    } else if (expectedRole === 'user' && email === 'user@company.com' && password === 'user123') {
-      onLogin('user');
-    } else {
-      setError('Invalid credentials. Please check your email and password.');
+  try {
+    // Send the login attempt to your new Node.js backend route
+    const response = await axios.post('http://localhost:5000/api/users/login', {
+      email: email,
+      password: password,
+      role: expectedRole // Ensures an Admin can't log into the User portal, and vice versa!
+    });
+
+    // If the server responds with 200 OK, the login was successful!
+    if (response.status === 200) {
+      onLogin(expectedRole);
     }
-  };
+  } catch (err) {
+    // If the server says 401 Unauthorized, display the error message
+    setError(err.response?.data?.error || 'Invalid credentials. Please try again.');
+  }
+};
 
   return (
     <div className="auth-wrapper">
@@ -133,8 +143,6 @@ export default function Login({ onLogin }) {
               <div className="overlay-brand">
                 <img src="/logo.png" alt="Company Logo" className="overlay-logo" />
                 <div className="overlay-titles">
-                  <h2>Sumathi Universal</h2>
-                  <p>Marketing Dashboard</p>
                 </div>
               </div>
               <h3>Standard<br/>User Access</h3>
@@ -147,8 +155,6 @@ export default function Login({ onLogin }) {
               <div className="overlay-brand">
                 <img src="/logo.png" alt="Company Logo" className="overlay-logo" />
                 <div className="overlay-titles">
-                  <h2>Sumathi Universal</h2>
-                  <p>Marketing Dashboard</p>
                 </div>
               </div>
               <h3>Administrator<br/> Access</h3>

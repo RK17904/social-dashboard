@@ -159,7 +159,7 @@ export default function UserApp({ onLogout }) {
                   <button className="icon-btn" style={{ color: 'var(--accent-primary)' }} onClick={() => setIsPlaying(!isPlaying)}>{isPlaying ? <PauseCircle size={32} /> : <Play size={32} fill="currentColor" />}</button>
                   <button className="icon-btn" style={{ color: 'var(--text-primary)' }} onClick={handleNextSlide}><ChevronRight size={24} /></button>
                 </div>
-                <button onClick={() => setCurrentPage('dashboard')} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', backgroundColor: 'transparent', color: '#EF4444', border: '2px solid #EF4444', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem', transition: 'all 0.2s', zIndex: 10 }}><X size={20} /> Exit</button>
+                <button onClick={() => setCurrentPage('dashboard')} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', backgroundColor: 'transparent', color: '#EF4444', border: '2px solid #EF4444', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem', transition: 'all 0.2s', zIndex: 10 }}><X size={20} /> Exit Presentation</button>
               </div>
               <div key={`${selectedCompany}-${selectedPlatform}`} className="presentation-content"><StatGrid data={dashboardDataWithDeltas} /><MainCharts chartData={chartData} /></div>
               <div className="progress-bar-container"><div key={`progress-${selectedCompany}-${selectedPlatform}`} className="progress-bar-fill animate-progress" style={{ animationPlayState: isPlaying ? 'running' : 'paused' }}></div></div>
