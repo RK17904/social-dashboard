@@ -96,6 +96,7 @@ export default function AdminApp({ onLogout }) {
   const fetchDashboardData = async () => {
     setIsFetching(true); 
     try {
+      // 1. THIS WAS MISSING: We need to define queryParams so the backend knows what to fetch!
       const start = format(dateRange[0].startDate, 'yyyy-MM-dd');
       const end = format(dateRange[0].endDate, 'yyyy-MM-dd');
       const queryParams = `?company=${selectedCompany}&platform=${selectedPlatform}&startDate=${start}&endDate=${end}`;
@@ -113,18 +114,21 @@ export default function AdminApp({ onLogout }) {
       });
       setChartData(chartsRes.data); 
       setPieData(pieRes.data);
+      
+      // 2. THIS WAS MISSING: Use the real math from the backend, not the random simulation!
+      if (totalsRes.data.deltas) {
+        setDeltas(totalsRes.data.deltas);
+      } else {
+        setDeltas({ views: 0, visits: 0, viewers: 0, followers: 0, interactions: 0 });
+      }
 
-      setDeltas({
-        views: Math.floor(Math.random() * 30) - 5, visits: Math.floor(Math.random() * 30) - 5,
-        viewers: Math.floor(Math.random() * 30) - 5, followers: Math.floor(Math.random() * 30) - 5, interactions: Math.floor(Math.random() * 30) - 5,
-      });
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
       setTimeout(() => setIsFetching(false), 400); 
     }
   };
-
+  
   useEffect(() => {
     const currentAccountExists = accounts.find(acc => acc.name === selectedCompany);
     if (!currentAccountExists) {

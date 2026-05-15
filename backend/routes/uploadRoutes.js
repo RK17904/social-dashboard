@@ -51,30 +51,87 @@ router.post('/', async (req, res) => {
     }
 });
 
-// 2. GET: Dashboard Totals (FILTERED)
+// 2. GET: Dashboard Totals AND Deltas (FILTERED)
 router.get('/totals', async (req, res) => {
-    const { company, platform } = req.query; // Catch the filters from the frontend
+    const { company, platform, startDate, endDate } = req.query; 
+
     try {
+        // --- A. CALCULATE DATES FOR THE PREVIOUS PERIOD ---
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        
+        // Find how many days they selected
+        const diffTime = Math.abs(end - start);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        // Shift dates back by that exact amount of days
+        const prevEnd = new Date(start);
+        prevEnd.setDate(prevEnd.getDate() - 1);
+        const prevStart = new Date(prevEnd);
+        prevStart.setDate(prevStart.getDate() - diffDays);
+
+        // Format for PostgreSQL (YYYY-MM-DD)
+        const prevStartStr = prevStart.toISOString().split('T')[0];
+        const prevEndStr = prevEnd.toISOString().split('T')[0];
+
+        // --- B. QUERY CURRENT PERIOD ---
         const query = `
             SELECT 
-                COALESCE(SUM(views), 0) as total_views,
-                COALESCE(SUM(visits), 0) as total_visits,
-                COALESCE(SUM(viewers), 0) as total_viewers,
+                COALESCE(SUM(views), 0) as views,
+                COALESCE(SUM(visits), 0) as visits,
+                COALESCE(SUM(viewers), 0) as viewers,
                 COALESCE(MAX(followers), 0) as followers,
                 COALESCE(SUM(interactions), 0) as interactions
             FROM account_stats
-            WHERE company = $1 AND platform = $2
+            WHERE company = $1 AND platform = $2 
+            AND recorded_date >= $3 AND recorded_date <= $4
         `;
-        const result = await pool.query(query, [company, platform]);
-        res.status(200).json(result.rows[0] || { total_views: 0, total_visits: 0, total_viewers: 0, followers: 0, interactions: 0 });
+        const currentRes = await pool.query(query, [company, platform, startDate, endDate]);
+        const current = currentRes.rows[0];
+
+        // --- C. QUERY PREVIOUS PERIOD ---
+        const prevRes = await pool.query(query, [company, platform, prevStartStr, prevEndStr]);
+        const prev = prevRes.rows[0];
+
+        // --- D. CALCULATE PERCENTAGE CHANGE (DELTAS) ---
+        const calcDelta = (currStr, prevStr) => {
+            const c = parseFloat(currStr) || 0;
+            const p = parseFloat(prevStr) || 0;
+            if (p === 0 && c === 0) return 0;
+            if (p === 0) return 100; // 100% growth if previous was 0!
+            return Math.round(((c - p) / p) * 100);
+        };
+
+        const deltas = {
+            views: calcDelta(current.views, prev.views),
+            visits: calcDelta(current.visits, prev.visits),
+            viewers: calcDelta(current.viewers, prev.viewers),
+            followers: calcDelta(current.followers, prev.followers), 
+            interactions: calcDelta(current.interactions, prev.interactions)
+        };
+
+        // --- E. SEND EVERYTHING TO REACT ---
+        res.status(200).json({
+            total_views: current.views,
+            total_visits: current.visits,
+            total_viewers: current.viewers,
+            followers: current.followers,
+            interactions: current.interactions,
+            deltas: deltas // <-- We are sending the real math here!
+        });
+
     } catch (error) {
+        console.error("Error calculating totals and deltas:", error);
         res.status(500).json({ error: "Failed to fetch totals" });
     }
 });
 
 // 3. GET: Time-Series Data for the Graphs (FILTERED)
+// 3. GET: Time-Series Data for the Graphs (FILTERED BY DATE)
 router.get('/charts', async (req, res) => {
-    const { company, platform } = req.query;
+    // 1. Catch the dates sent by your React Calendar
+    const { company, platform, startDate, endDate } = req.query;
+    
     try {
         const query = `
             SELECT 
@@ -84,13 +141,17 @@ router.get('/charts', async (req, res) => {
                 SUM(visits) as comments 
             FROM account_stats 
             WHERE company = $1 AND platform = $2
+            AND recorded_date >= $3 AND recorded_date <= $4 -- 2. Filter by exact dates!
             GROUP BY recorded_date 
             ORDER BY recorded_date ASC 
-            LIMIT 30
         `;
-        const result = await pool.query(query, [company, platform]);
+        
+        // 3. Pass the dates into the SQL query
+        const result = await pool.query(query, [company, platform, startDate, endDate]);
         res.status(200).json(result.rows);
+        
     } catch (error) {
+        console.error("Error fetching chart data:", error);
         res.status(500).json({ error: "Failed to fetch chart data" });
     }
 });
