@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
-// This securely connects your Node backend to your Neon PostgreSQL database
+//connets backend to the neon database 
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: {

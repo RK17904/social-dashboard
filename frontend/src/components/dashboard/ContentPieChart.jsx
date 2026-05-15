@@ -44,7 +44,7 @@ export default function ContentPieChart({ pieData = [] }) {
             >
               {hasData 
                 ? pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)
-                : <Cell fill="var(--border-color)" opacity={0.3} /> // Grey ring when empty
+                : <Cell fill="var(--border-color)" opacity={0.3} /> //grey ring when empty
               }
             </Pie>
             {hasData && <Tooltip content={<CustomTooltip />} />}

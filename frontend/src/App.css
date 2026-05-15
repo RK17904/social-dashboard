@@ -1,26 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
-/* --- GLOBAL THEME VARIABLES --- */
+/*globle variables */
 :root {
-  /* Light Theme (Based on your template) */
+  /* light theme */
   --bg-main: #F4F7FE;
   --bg-card: #FFFFFF;
   --text-primary: #1B254B;
   --text-secondary: #A3AED0;
-  --accent-primary: #7052FF; /* The purple from the template */
+  --accent-primary: #7052FF; 
   --accent-light: #E9E3FF;
   --border-color: #E2E8F0;
   
-  /* Sidebar & Header */
+  /* sidebar & header */
   --sidebar-bg: #FFFFFF;
   --header-bg: rgba(255, 255, 255, 0.9);
   
-  /* Utilities */
+  /* utilities */
   --shadow-card: 0px 4px 15px rgba(0, 0, 0, 0.05);
   --radius-card: 16px;
   --transition-speed: 0.3s;
 }
 
-/* Dark Theme Overrides */
+/* dark theme overrides */
 [data-theme='dark'] {
   --bg-main: #0B1437;
   --bg-card: #111C44;
@@ -35,16 +35,14 @@
   --shadow-card: 0px 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* =========================================
-   PREMIUM UX ANIMATIONS & HOVERS
-   ========================================= */
+/* hover animations */
 
-/* 1. Smooth Light/Dark Mode Transition */
+/* light/dark mode transition */
 body, .app-container, .sidebar, .main-content, .header, .stat-card, .filter-bar, .modal-content, select, input, button, div, span, h1, h2, h3, h4, p {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* 2. Slide-up Animation for Page Switching */
+/* slide up animation */
 .page-transition {
   animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -54,7 +52,7 @@ body, .app-container, .sidebar, .main-content, .header, .stat-card, .filter-bar,
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* 3. Stat Card Hover Gradients */
+/* stat card hover gradients */
 .stat-card {
   position: relative;
   overflow: hidden;
@@ -65,7 +63,6 @@ body, .app-container, .sidebar, .main-content, .header, .stat-card, .filter-bar,
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  /* A beautiful soft purple gradient that looks great in both themes */
   background: linear-gradient(135deg, rgba(112, 82, 255, 0.15) 0%, rgba(112, 82, 255, 0) 100%);
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -81,12 +78,12 @@ body, .app-container, .sidebar, .main-content, .header, .stat-card, .filter-bar,
   opacity: 1;
 }
 
-/* 4. Blurred Loading Overlay */
+/*blured loading overlay*/
 .loading-overlay {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   background-color: rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px); /* The blur effect! */
+  backdrop-filter: blur(5px); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -109,22 +106,20 @@ body, .app-container, .sidebar, .main-content, .header, .stat-card, .filter-bar,
   100% { transform: rotate(360deg); } 
 }
 
-/* 5. Eye-Catching Sidebar Text in Dark Mode */
+/* sidebar Text in Dark Mode */
 body[data-theme='dark'] .nav-item span,
 .dark-mode .nav-item span {
-  color: #E2E8F0; /* Much brighter, crisper white/grey */
+  color: #E2E8F0; 
   font-weight: 500;
 }
 
 body[data-theme='dark'] .nav-item.active span,
 .dark-mode .nav-item.active span {
-  color: #FFFFFF; /* Pure white for the active tab */
+  color: #FFFFFF; 
   font-weight: 600;
 }
 
-/* =========================================
-   SIDEBAR LOGO & HEADER STYLES
-   ========================================= */
+/* side bar logo and header styles */
 
 .sidebar-header {
   display: flex;
@@ -132,11 +127,11 @@ body[data-theme='dark'] .nav-item.active span,
   justify-content: space-between;
   padding: 20px;
   margin-bottom: 10px;
-  height: 80px; /* Fixed height to prevent jumping */
+  height: 80px; 
   transition: all 0.3s ease;
 }
 
-/* Expanded State: Full Logo */
+/* expanded state: full logo */
 .brand-logo {
   height: 36px; 
   width: 140px; 
@@ -145,15 +140,13 @@ body[data-theme='dark'] .nav-item.active span,
   transition: all 0.3s ease;
 }
 
-/* Collapsed State: Stack the icon and hide the text! */
+/* collapsed State: stack the icon and hide the text */
 .sidebar.collapsed .sidebar-header {
   flex-direction: column;
   padding: 15px 0;
   gap: 15px;
 }
 
-/* THE MAGIC TRICK: We swap 'contain' to 'cover' and force a square width. 
-   This perfectly crops out the text and leaves only the blue icon! */
 .sidebar.collapsed .brand-logo {
   width: 36px; 
   height: 36px;
@@ -162,7 +155,7 @@ body[data-theme='dark'] .nav-item.active span,
   border-radius: 4px;
 }
 
-/* --- BASE STYLES --- */
+/* base styles */
 * {
   margin: 0;
   padding: 0;
@@ -176,7 +169,7 @@ body {
   transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 
-/* --- LAYOUT GRID --- */
+/* layout cards */
 .app-container {
   display: flex;
   min-height: 100vh;
@@ -186,11 +179,10 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-left: 250px; /* Width of expanded sidebar */
+  margin-left: 250px; 
   transition: margin-left var(--transition-speed);
 }
 
-/* When sidebar is collapsed */
 .app-container.sidebar-collapsed .main-content {
   margin-left: 80px; 
 }
@@ -201,7 +193,7 @@ body {
   overflow-y: auto;
 }
 
-/* --- SIDEBAR STYLES --- */
+/* side bar styles */
 .sidebar {
   width: 250px;
   background-color: var(--sidebar-bg);
@@ -262,7 +254,7 @@ body {
   display: none;
 }
 
-/* --- HEADER STYLES --- */
+/* header styles */
 .top-header {
   height: 80px;
   background-color: var(--header-bg);
@@ -333,7 +325,7 @@ body {
   font-weight: bold;
 }
 
-/* --- FILTER BAR STYLES --- */
+/* filter bar */
 .filter-bar {
   display: flex;
   justify-content: space-between;
@@ -396,14 +388,14 @@ body {
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-/* --- TOAST NOTIFICATION STYLES --- */
+/* tost notification */
 .toast-container {
   position: fixed;
   bottom: 30px;
   right: 30px;
   background-color: var(--bg-card);
   color: var(--text-primary);
-  border-left: 4px solid #4ADE80; /* Green for success */
+  border-left: 4px solid #4ADE80; 
   box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
   padding: 15px 20px 20px 20px;
   border-radius: 8px;
@@ -414,7 +406,7 @@ body {
 }
 
 .toast-container.error {
-  border-left-color: #EF4444; /* Red for error */
+  border-left-color: #EF4444; 
 }
 
 .toast-progress {
@@ -440,7 +432,7 @@ body {
   to { width: 0%; }
 }
 
-/* --- WARNING MODAL STYLES --- */
+/* warning model */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -448,7 +440,7 @@ body {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px); /* The blurred background effect */
+  backdrop-filter: blur(8px); 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -482,7 +474,7 @@ body {
   opacity: 0.9;
 }
 
-/* --- CALENDAR POPOVER & MODAL STYLES --- */
+/* calendar pop over model*/
 .dropdown-container {
   position: relative;
 }
@@ -520,7 +512,7 @@ body {
   color: var(--accent-primary);
 }
 
-/* Platform Toggles for the Add Modal */
+/* platform toggles for the add modal */
 .platform-toggle {
   padding: 10px;
   border: 1px solid var(--border-color);
@@ -552,15 +544,12 @@ body {
   font-family: inherit;
 }
 
-/* =========================================
-   PRESENTATION MODE STYLES
-   ========================================= */
-
+/* presentation mode */
 .presentation-container {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
   background-color: var(--bg-main);
-  z-index: 9999; /* Sit on top of absolutely everything */
+  z-index: 9999; 
   padding: 40px 60px;
   display: flex;
   flex-direction: column;
@@ -571,29 +560,26 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px; /* Slightly reduced to give charts more vertical room */
-  flex-shrink: 0; /* Ensures the header never gets squished */
+  margin-bottom: 30px; 
+  flex-shrink: 0; 
   animation: slideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* This class holds the dashboard and forces the pop-up animation */
 .presentation-content {
-  flex: 1; /* Takes up all remaining screen space */
+  flex: 1; 
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding-bottom: 20px; /* Adds breathing room above the progress bar */
+  padding-bottom: 20px; 
   animation: popUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  min-height: 0; /* Critical flexbox trick to allow inner charts to stretch */
+  min-height: 0; 
 }
 
-/* 1. Force the MainCharts container to take all available bottom space */
 .presentation-content > div:last-child {
   flex: 1;
   margin-bottom: 0 !important; 
 }
 
-/* 2. Override the 220px React inline style so graphs stretch to the floor */
 .presentation-content > div:last-child > div > div:last-child {
   height: 100% !important;
   min-height: 200px;
@@ -610,9 +596,9 @@ body {
   background-color: var(--accent-primary);
 }
 
-/* Ties directly to the 10-second slide timer */
+/* presentation time slider */
 .animate-progress {
-  animation: slideProgress 10s linear forwards;
+  animation: slideProgress 15s linear forwards;
 }
 
 @keyframes popUp {
@@ -630,9 +616,27 @@ body {
   to { width: 100%; }
 }
 
-/* =========================================
-   ACTIVITY TIMELINE STYLES
-   ========================================= */
+/*slide timer */
+.animate-progress {
+  animation: slideProgress 15s linear forwards;
+}
+
+@keyframes popUp {
+  from { transform: scale(0.95) translateY(40px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+/* activity timeline */
 
 .timeline-container {
   position: relative;
@@ -641,13 +645,13 @@ body {
   padding: 20px 0;
 }
 
-/* The vertical connecting line */
+/* vertical connecting line */
 .timeline-container::before {
   content: '';
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 31px; /* Centers the line exactly under the icons */
+  left: 31px; 
   width: 2px;
   background-color: var(--border-color);
   z-index: 1;
@@ -663,7 +667,7 @@ body {
   opacity: 0;
 }
 
-/* Stagger the animations so they load sequentially */
+/* stagger the animations so they load sequentially */
 .timeline-item:nth-child(1) { animation-delay: 0.1s; }
 .timeline-item:nth-child(2) { animation-delay: 0.2s; }
 .timeline-item:nth-child(3) { animation-delay: 0.3s; }
@@ -676,8 +680,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--bg-main); /* Matches background to cut out the line */
-  border: 4px solid var(--bg-main); /* Creates a gap around the icon */
+  background-color: var(--bg-main); 
+  border: 4px solid var(--bg-main); 
   flex-shrink: 0;
 }
 
@@ -696,9 +700,7 @@ body {
   border-color: var(--accent-primary);
 }
 
-/* =========================================
-   LIGHT MODE OVERRIDES
-   ========================================= */
+/* light mode overrides */
 [data-theme="light"] {
   --bg-main: #F3F4F6;         /* Light gray background */
   --bg-card: #FFFFFF;         /* Pure white cards */
@@ -708,9 +710,7 @@ body {
   --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05); /* Softer drop shadows */
 }
 
-/* =========================================
-   AUTHENTICATION PAGE STYLES (LOGIN)
-   ========================================= */
+/* login page */
 .auth-wrapper {
   position: relative;
   min-height: 100vh;
@@ -719,32 +719,32 @@ body {
   justify-content: center;
   padding: 20px;
   font-family: 'Inter', sans-serif;
-  overflow: hidden; /* Prevents the video from causing scrollbars */
+  overflow: hidden; 
 }
 
-/* NEW: Streches the video to cover the screen */
+/* streches video to cover the screen */
 .auth-video-bg {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Ensures it fills the screen without stretching */
+  object-fit: cover; 
   z-index: 0;
 }
 
-/* NEW: Darkens the video so the white login card is easy to read */
+/* darkens the video so the white login card is easy to read */
 .auth-video-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.2); /* Adjust the 0.2 up to 0.5 if your video is very bright */
+  background-color: rgba(0, 0, 0, 0.2); 
   z-index: 1;
 }
 
-/* THE GLASSMORPHISM CONTAINER */
+/*glassmorphic container */
 .auth-container {
   background-color: rgba(255, 255, 255, 0.7); 
   backdrop-filter: blur(24px);
@@ -760,14 +760,14 @@ body {
   opacity: 0;
   transform: translateY(40px);
   transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 2; /* Ensures the card sits ON TOP of the video and overlay */
+  z-index: 2; 
 }
 .auth-container.mounted {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* Make sure the text on the glass side stays dark and legible */
+/* make sure the text on the glass side stays dark and legible */
 .auth-form-container h1, 
 .auth-form-container .auth-subtitle, 
 .auth-form-container label, 
@@ -775,7 +775,7 @@ body {
   color: #111827; 
 }
 
-/* Make inputs slightly transparent to match the glass */
+/* make inputs slightly transparent to match the glass */
 .input-wrapper input {
   background: rgba(255, 255, 255, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.8);
@@ -784,7 +784,7 @@ body {
   background: rgba(255, 255, 255, 0.9);
 }
 
-/* FORM CONTAINERS */
+/* form containers */
 .auth-form-container {
   position: absolute;
   top: 0;
@@ -796,7 +796,7 @@ body {
   padding: 0 40px;
 }
 
-/* USER FORM (LEFT - DEFAULT) */
+/* user form */
 .user-container {
   left: 0;
   width: 50%;
@@ -808,7 +808,7 @@ body {
   z-index: 1;
 }
 
-/* ADMIN FORM (RIGHT) */
+/* admin form */
 .admin-container {
   left: 0;
   width: 50%;
@@ -827,7 +827,7 @@ body {
   50%, 100% { opacity: 1; z-index: 5; }
 }
 
-/* TEXT AND HEADERS */
+/* text and headers*/
 .auth-header {
   display: flex;
   align-items: center;
@@ -853,30 +853,28 @@ body {
   margin-top: 0;
 }
 
-/* =========================================
-   FIX: FORCE DARK TEXT ON LOGIN INPUTS
-   ========================================= */
+/* dark/ light mode fix */
 .auth-wrapper .input-wrapper input {
-  color: #111827 !important; /* Forces the typed text to stay dark */
+  color: #111827 !important; /* typed text to stay dark */
 }
 
 .auth-wrapper .input-wrapper input::placeholder {
-  color: #6B7280 !important; /* Forces the placeholder text to stay gray */
+  color: #6B7280 !important; /* placeholder text to stay gray */
   opacity: 1; 
 }
 
 .auth-wrapper .input-icon {
-  color: #6B7280 !important; /* Ensures the Mail and Lock icons stay visible */
+  color: #6B7280 !important; /* ensures the Mail and Lock icons stay visible */
 }
 
-/* Also ensure the error messages remain readable if dark mode is active */
+/* ensure the error messages remain readable if dark mode is active */
 .auth-wrapper .auth-error {
   background-color: #FEE2E2 !important;
   color: #DC2626 !important;
   border-color: #FCA5A5 !important;
 }
 
-/* INPUTS */
+/*inputs*/
 .input-group {
   margin-bottom: 15px;
 }
@@ -926,7 +924,7 @@ body {
   border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
-/* PRIMARY BUTTON */
+/*submit button */
 .auth-submit-btn {
   width: 100%;
   padding: 12px;
@@ -945,9 +943,7 @@ body {
   box-shadow: 0 4px 12px rgba(112, 82, 255, 0.3);
 }
 
-/* =========================================
-   THE SLIDING OVERLAY (WITH CURVED EDGE)
-   ========================================= */
+/* sliding overlay */
 .auth-overlay-container {
   position: absolute;
   top: 0;
@@ -957,12 +953,12 @@ body {
   overflow: hidden;
   transition: transform 0.6s ease-in-out, border-radius 0.6s ease-in-out;
   z-index: 100;
-  /* THE MAGIC VIDEO CURVE - Default curve on the left side */
+  /* default curve on the left side */
   border-radius: 120px 0 0 120px; 
 }
 .auth-container.right-panel-active .auth-overlay-container {
   transform: translateX(-100%);
-  /* Curve flips to the right side when it slides! */
+  /* curve flips to the right side when it slides */
   border-radius: 0 120px 120px 0; 
 }
 
@@ -980,7 +976,7 @@ body {
   transform: translateX(50%);
 }
 
-/* OVERLAY CONTENT PANELS */
+/* overlay content pannels */
 .auth-overlay-panel {
   position: absolute;
   display: flex;
@@ -1009,7 +1005,7 @@ body {
   transform: translateX(20%);
 }
 
-/* OVERLAY TEXT & LOGO STYLING */
+/* overlay text & logos*/
 .overlay-brand {
   display: flex;
   align-items: center;

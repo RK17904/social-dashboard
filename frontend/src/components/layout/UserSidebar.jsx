@@ -28,7 +28,7 @@ export default function UserSidebar({ isCollapsed, setIsCollapsed, currentPage, 
         </div>
       </div>
 
-      {/* FOOTER SECTION: Data Health */}
+      {/* data health- footer */}
       {!isCollapsed && (
         <div style={{ marginTop: 'auto', padding: '20px', borderTop: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <div>

@@ -5,16 +5,14 @@ export default function Settings({ accounts, setAccounts }) {
   const [activeTab, setActiveTab] = useState('appearance');
   const [toast, setToast] = useState(false);
 
-  // --- APPEARANCE STATE ---
+  //apperance state
   const [theme, setTheme] = useState(() => {
     return document.documentElement.getAttribute('data-theme') || 'light';
   });
   const [accentColor, setAccentColor] = useState(() => {
-    // Read the current CSS variable from the browser
     const currentCSSColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-primary').trim();
-    // Return that color, or default to purple if it can't find one
     return currentCSSColor || '#7052FF';
-  });// Default Purple
+  });
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -28,12 +26,12 @@ export default function Settings({ accounts, setAccounts }) {
     { name: 'Rose', hex: '#FFC107' }
   ];
 
-  // Dynamically change the CSS variable for the whole app!
+  //dynamically changes the css 
   useEffect(() => {
     document.documentElement.style.setProperty('--accent-primary', accentColor);
   }, [accentColor]);
 
-  // --- PORTFOLIO STATE ---
+  //portfolio state
   const [newCompanyName, setNewCompanyName] = useState('');
   const [newCompanyPlatforms, setNewCompanyPlatforms] = useState({
     Facebook: true, Instagram: false, LinkedIn: false
@@ -46,7 +44,7 @@ export default function Settings({ accounts, setAccounts }) {
   const handleAddCompany = () => {
     if (!newCompanyName.trim()) return;
     
-    // Convert the true/false object into an array of strings (e.g., ['Facebook', 'LinkedIn'])
+    // convert the true/false object into an array of strings (e.g., ['Facebook', 'LinkedIn'])
     const platformsArray = Object.keys(newCompanyPlatforms).filter(key => newCompanyPlatforms[key]);
     
     if (platformsArray.length === 0) {
@@ -54,10 +52,10 @@ export default function Settings({ accounts, setAccounts }) {
         return;
     }
 
-    // Add it to the master list
+    // add to the master list
     setAccounts([...accounts, { name: newCompanyName, platforms: platformsArray }]);
     
-    // Reset the form and show success
+    //reset form, show success
     setNewCompanyName('');
     setNewCompanyPlatforms({ Facebook: true, Instagram: false, LinkedIn: false });
     showToast();
@@ -98,10 +96,10 @@ export default function Settings({ accounts, setAccounts }) {
           </button>
         </div>
 
-        {/* SETTINGS CONTENT AREA */}
+        {/*content area- settings*/}
         <div style={{ flex: 1, backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-card)', padding: '30px', minHeight: '500px' }}>
           
-          {/* TAB 1: APPEARANCE */}
+          {/*tab 1- apperance */}
           {activeTab === 'appearance' && (
             <div className="animation-fade-in">
               <h3 style={{ color: 'var(--text-primary)', marginBottom: '25px', borderBottom: '1px solid var(--border-color)', paddingBottom: '15px' }}>Appearance Preferences</h3>
@@ -138,12 +136,12 @@ export default function Settings({ accounts, setAccounts }) {
             </div>
           )}
 
-          {/* TAB 2: PORTFOLIO */}
+          {/*tab 2 portfolio */}
           {activeTab === 'portfolio' && (
             <div className="animation-fade-in">
               <h3 style={{ color: 'var(--text-primary)', marginBottom: '25px', borderBottom: '1px solid var(--border-color)', paddingBottom: '15px' }}>Portfolio Manager</h3>
               
-              {/* Add New Company Form */}
+              {/*add company form */}
               <div style={{ backgroundColor: 'var(--bg-main)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)', marginBottom: '30px' }}>
                 <h4 style={{ color: 'var(--text-primary)', marginBottom: '15px' }}>Register New Entity</h4>
                 <div style={{ display: 'flex', gap: '15px', marginBottom: '15px' }}>
@@ -175,7 +173,7 @@ export default function Settings({ accounts, setAccounts }) {
                 </button>
               </div>
 
-              {/* Active Companies List */}
+              {/* active company list */}
               <h4 style={{ color: 'var(--text-primary)', marginBottom: '15px' }}>Active Entities</h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {accounts.map(acc => (
@@ -197,7 +195,7 @@ export default function Settings({ accounts, setAccounts }) {
         </div>
       </div>
 
-      {/* TOAST NOTIFICATION */}
+      {/* toast notification */}
       {toast && (
         <div className="toast-container">
           <span style={{ fontWeight: '600' }}><CheckCircle size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '5px' }}/> Saved!</span>

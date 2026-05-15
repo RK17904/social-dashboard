@@ -72,10 +72,9 @@ export default function DataUploader({ onUploadSuccess, onBack }) {
     };
 
     return (
-        /* NEW: Wrapper that centers everything horizontally and sets the new 850px width */
         <div style={{ maxWidth: '850px', margin: '40px auto', width: '100%' }}>
             
-            {/* THE WARNING BLUR MODAL */}
+            {/*warning model -blur screen */}
             {showWarning && (
                 <div className="modal-overlay">
                     <div className="modal-content">
@@ -98,7 +97,7 @@ export default function DataUploader({ onUploadSuccess, onBack }) {
                 <ArrowLeft size={18} /> Back to Dashboard
             </button>
 
-            {/* MAIN UPLOADER CARD: Removed its inline width so it matches the centered wrapper */}
+            {/* main uploader card */}
             <div style={{ background: 'var(--bg-card)', padding: '40px', borderRadius: 'var(--radius-card)', boxShadow: 'var(--shadow-card)', border: '1px solid var(--border-color)' }}>
                 <h2 style={{ marginBottom: '25px', color: 'var(--text-primary)' }}>Data Upload Center</h2>
                 
@@ -172,7 +171,7 @@ export default function DataUploader({ onUploadSuccess, onBack }) {
                 )}
             </div>
 
-            {/* TOAST NOTIFICATION */}
+            {/* tost notification */}
             {toast && (
                 <div className={`toast-container ${toast.type === 'error' ? 'error' : ''}`}>
                     <span style={{ fontWeight: '600' }}>{toast.type === 'error' ? 'Oops!' : 'Uploaded!'}</span>

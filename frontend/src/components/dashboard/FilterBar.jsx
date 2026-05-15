@@ -8,7 +8,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css'; 
 
 export default function FilterBar({ 
-  accounts, setAccounts, // UserApp doesn't pass setAccounts!
+  accounts, setAccounts,
   selectedCompany, setSelectedCompany, 
   selectedPlatform, setSelectedPlatform,
   dateRange, setDateRange 
@@ -29,7 +29,7 @@ export default function FilterBar({
   }, [selectedCompany, activeAccount, selectedPlatform, setSelectedPlatform]);
 
   const handleAddAccount = () => {
-    // Failsafe in case a non-admin somehow triggers this
+    //failsafe in case a non-admin somehow triggers this
     if (!setAccounts || !newCompanyName || newCompanyPlatforms.length === 0) return;
     
     setAccounts([...accounts, { 
@@ -72,9 +72,7 @@ export default function FilterBar({
   return (
     <div className="filter-bar">
       
-      {/* ==========================================
-          CONDITIONAL RENDER: ONLY ADMINS SEE THE MODAL
-          ========================================== */}
+      {/* conditional render for the admmin*/}
       {setAccounts && showAddModal && (
         <div className="modal-overlay">
           <div className="modal-content" style={{ maxWidth: '500px', textAlign: 'left' }}>
@@ -107,15 +105,13 @@ export default function FilterBar({
         </div>
       )}
 
-      {/* ==========================================
-          CONDITIONAL RENDER: ONLY ADMINS SEE THE "+" BUTTON
-          ========================================== */}
+      {/* conditional render add account (for admin)*/}
       <div className="filter-group">
         <select className="custom-select" value={selectedCompany} onChange={(e) => setSelectedCompany(e.target.value)}>
           {accounts.map((acc, index) => <option key={index} value={acc.name}>{acc.name}</option>)}
         </select>
         
-        {/* If setAccounts exists (Admin), render the button. If not (User), hide it! */}
+        {/* setAccounts exists (Admin), render the button. if not (User), hide*/}
         {setAccounts && (
           <button className="icon-btn" style={{ border: '1px solid var(--border-color)' }} title="Add Account" onClick={() => setShowAddModal(true)}>
             <Plus size={20} />

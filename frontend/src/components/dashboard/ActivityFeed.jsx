@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { UploadCloud, CheckCircle, RefreshCw, AlertTriangle, UserPlus } from 'lucide-react';
 
-// Notice we added { activities } as a prop here!
+//for activities
 export default function ActivityFeed({ activities = [] }) {
   const [filter, setFilter] = useState('all');
 

@@ -3,7 +3,7 @@ import { Mail, Lock, ShieldCheck, User } from 'lucide-react';
 import axios from 'axios';
 
 export default function Login({ onLogin }) {
-  // State to control the sliding animation (Admin is now the right panel)
+  //sliding animation
   const [isAdminView, setIsAdminView] = useState(false);
   
   const [email, setEmail] = useState('');
@@ -32,39 +32,36 @@ export default function Login({ onLogin }) {
   }
 
   try {
-    // Send the login attempt to your new Node.js backend route
     const response = await axios.post('http://localhost:5000/api/users/login', {
       email: email,
       password: password,
-      role: expectedRole // Ensures an Admin can't log into the User portal, and vice versa!
+      role: expectedRole //ensure correct logins
     });
 
-    // If the server responds with 200 OK, the login was successful!
+    //server success msg (200 OK)
     if (response.status === 200) {
       onLogin(expectedRole);
     }
   } catch (err) {
-    // If the server says 401 Unauthorized, display the error message
+    // 401 fail msg
     setError(err.response?.data?.error || 'Invalid credentials. Please try again.');
   }
 };
 
   return (
     <div className="auth-wrapper">
-{/* 1. THE BACKGROUND VIDEO */}
+{/* hero video for login*/}
       <video autoPlay loop muted playsInline className="auth-video-bg">
         <source src="/login.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
-      {/* 2. A SUBTLE DARK OVERLAY (Helps the glass card pop!) */}
+      {/* dark overrellay */}
       <div className="auth-video-overlay"></div>
 
-      {/* 3. YOUR EXISTING LOGIN CARD */}
+      {/* existing login card*/}
       <div className={`auth-container ${isAdminView ? 'right-panel-active' : ''} ${mounted ? 'mounted' : ''}`}>        
-        {/* =========================================
-            FORM 1: USER LOGIN (LEFT SIDE - DEFAULT)
-            ========================================= */}
+        {/* user login default */}
         <div className="auth-form-container user-container">
           <div className="auth-header">
             <User size={28} color="var(--accent-primary)" />
@@ -97,9 +94,7 @@ export default function Login({ onLogin }) {
           </form>
         </div>
 
-        {/* =========================================
-            FORM 2: ADMIN LOGIN (RIGHT SIDE)
-            ========================================= */}
+        {/* admin login */}
         <div className="auth-form-container admin-container">
           <div className="auth-header">
             <ShieldCheck size={28} color="var(--accent-primary)" />
@@ -132,13 +127,11 @@ export default function Login({ onLogin }) {
           </form>
         </div>
 
-        {/* =========================================
-            THE SLIDING OVERLAY (PURPLE PANEL)
-            ========================================= */}
+        {/* purple pannel (sliding overrellay) */}
         <div className="auth-overlay-container">
           <div className="auth-overlay">
             
-            {/* LEFT OVERLAY PANEL (Visible when Admin form is active) */}
+            {/* left overlay pannel (admin active) */}
             <div className="auth-overlay-panel auth-overlay-left">
               <div className="overlay-brand">
                 <img src="/logo.png" alt="Company Logo" className="overlay-logo" />
@@ -150,7 +143,7 @@ export default function Login({ onLogin }) {
               <button className="auth-ghost-btn" onClick={toggleView}>User Login</button>
             </div>
 
-            {/* RIGHT OVERLAY PANEL (Visible when User form is active - DEFAULT) */}
+            {/* right overlay pannel (user active - default)*/}
             <div className="auth-overlay-panel auth-overlay-right">
               <div className="overlay-brand">
                 <img src="/logo.png" alt="Company Logo" className="overlay-logo" />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { LayoutDashboard, UploadCloud, Activity, Settings, Menu, MonitorPlay, Clock, Shield, User, Users } from 'lucide-react';
 export default function Sidebar({ isCollapsed, setIsCollapsed, currentPage, setCurrentPage }) {
-  // Generate a live timestamp for the demo
+  //live time stamp
   const syncTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   return (
@@ -40,7 +40,7 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, currentPage, setC
         </div>
       </div>
 
-      {/* DATA HEALTH TIMESTAMP */}
+      {/* data health time stamp */}
       {!isCollapsed && (
         <div style={{ marginTop: 'auto', padding: '20px', borderTop: '1px solid var(--border-color)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '0.8rem', fontWeight: '500' }}>

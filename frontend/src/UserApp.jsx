@@ -25,12 +25,12 @@ function InsightsBanner({ platform }) {
   );
 }
 
-// Notice we are passing { onLogout } in as a prop!
+//log out pop 
 export default function UserApp({ onLogout }) {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [isCollapsed, setIsCollapsed] = useState(false);
   
-  // Hardcoded portfolio for the user (they cannot edit this)
+  //harcoded portfolio
   const accounts = [
     { name: 'Sumathi Universal', platforms: ['Facebook', 'Instagram', 'LinkedIn'] },
     { name: 'Sumathi Ventures', platforms: ['Facebook', 'Instagram', 'LinkedIn'] },
@@ -51,7 +51,6 @@ export default function UserApp({ onLogout }) {
   const fetchDashboardData = async () => {
     setIsFetching(true); 
     try {
-      // 1. THIS WAS MISSING: We need to define queryParams so the backend knows what to fetch!
       const start = format(dateRange[0].startDate, 'yyyy-MM-dd');
       const end = format(dateRange[0].endDate, 'yyyy-MM-dd');
       const queryParams = `?company=${selectedCompany}&platform=${selectedPlatform}&startDate=${start}&endDate=${end}`;
@@ -70,7 +69,6 @@ export default function UserApp({ onLogout }) {
       setChartData(chartsRes.data); 
       setPieData(pieRes.data);
       
-      // 2. THIS WAS MISSING: Use the real math from the backend, not the random simulation!
       if (totalsRes.data.deltas) {
         setDeltas(totalsRes.data.deltas);
       } else {
@@ -133,7 +131,7 @@ export default function UserApp({ onLogout }) {
       <UserSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} currentPage={currentPage} setCurrentPage={setCurrentPage} />
       
       <div className="main-content">
-        {/* Pass the role and onLogout prop down to Header */}
+        {/*pass the role and the logout prop to header */}
         {currentPage !== 'present' && <Header role="user" onLogout={onLogout} />}
         
         <main className="content-area">

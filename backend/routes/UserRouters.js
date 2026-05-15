@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-// Adjust this path if your db.js is in a different folder!
 const pool = require('../config/db');
 
-// 1. GET: Fetch all users
+//GET: fetch all users
 router.get('/', async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM team_users ORDER BY id ASC');
@@ -14,7 +13,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// 2. POST: Create a new user
+//POST: create a new user
 router.post('/', async (req, res) => {
     const { name, email, role, password } = req.body;
     try {
@@ -27,7 +26,7 @@ router.post('/', async (req, res) => {
         res.status(201).json(result.rows[0]);
     } catch (error) {
         console.error("Error creating user:", error);
-        // Handle duplicate email error specifically
+        //handle duplicate email error specifically
         if (error.code === '23505') {
             return res.status(400).json({ error: "A user with this email already exists." });
         }
@@ -35,7 +34,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-// 3. PUT: Update an existing user
+//PUT: update an existing user
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
     const { name, email, role, password } = req.body;
@@ -59,7 +58,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// 4. DELETE: Remove a user
+//DELETE: remove a user
 router.delete('/:id', async (req, res) => {
     const { id } = req.params;
     try {
@@ -76,19 +75,19 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-// 5. POST: Verify Login Credentials
+//POST: verify login credentials
 router.post('/login', async (req, res) => {
     const { email, password, role } = req.body;
     try {
-        // Query the database to see if a user exists with this exact email, password, AND role
+        //database to see if a user exists with this exact email, password, and  role
         const query = 'SELECT * FROM team_users WHERE email = $1 AND password = $2 AND role = $3';
         const result = await pool.query(query, [email, password, role]);
 
         if (result.rows.length === 1) {
-            // Match found! Send back success.
+            //match found, send back success.
             res.status(200).json(result.rows[0]);
         } else {
-            // No match found
+            //no match found
             res.status(401).json({ error: "Invalid credentials. Please check your email and password." });
         }
     } catch (error) {

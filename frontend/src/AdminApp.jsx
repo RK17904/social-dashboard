@@ -28,7 +28,7 @@ function InsightsBanner({ platform }) {
   );
 }
 
-// Notice we are passing { onLogout } in as a prop!
+//log out pop
 export default function AdminApp({ onLogout }) {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -49,22 +49,22 @@ export default function AdminApp({ onLogout }) {
   const [isPlaying, setIsPlaying] = useState(true);
   const [deltas, setDeltas] = useState({ views: 0, visits: 0, viewers: 0, followers: 0, interactions: 0 });
 
-  // 1. UPGRADE STATE TO USE LOCAL STORAGE
+  //state to local storage 
   const [activities, setActivities] = useState(() => {
     const savedLogs = localStorage.getItem('dashboard_activities');
     if (savedLogs) return JSON.parse(savedLogs);
-    // Default fallback log
+    //default feeback log
     return [
       { id: Date.now(), type: 'system', title: 'System Initialized', desc: 'Dashboard tracking services are online.', time: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }), user: 'System Agent', status: 'info' }
     ];
   });
 
-  // 2. AUTO-SAVE LOGS ON CHANGE
+  // auto save logs on change
   useEffect(() => {
     localStorage.setItem('dashboard_activities', JSON.stringify(activities));
   }, [activities]);
 
-  // 3. THE UNIVERSAL LOGGER FUNCTION
+  //logger function
   const logActivity = (type, title, desc, status = 'info') => {
     const newLog = {
       id: Date.now(),
@@ -75,7 +75,7 @@ export default function AdminApp({ onLogout }) {
       user: 'Admin User',
       status
     };
-    // Add new log to the top, keep only the latest 50 logs to prevent lag
+    //log out top
     setActivities(prevLogs => [newLog, ...prevLogs].slice(0, 50)); 
   };;
 
@@ -96,7 +96,6 @@ export default function AdminApp({ onLogout }) {
   const fetchDashboardData = async () => {
     setIsFetching(true); 
     try {
-      // 1. THIS WAS MISSING: We need to define queryParams so the backend knows what to fetch!
       const start = format(dateRange[0].startDate, 'yyyy-MM-dd');
       const end = format(dateRange[0].endDate, 'yyyy-MM-dd');
       const queryParams = `?company=${selectedCompany}&platform=${selectedPlatform}&startDate=${start}&endDate=${end}`;
@@ -115,7 +114,6 @@ export default function AdminApp({ onLogout }) {
       setChartData(chartsRes.data); 
       setPieData(pieRes.data);
       
-      // 2. THIS WAS MISSING: Use the real math from the backend, not the random simulation!
       if (totalsRes.data.deltas) {
         setDeltas(totalsRes.data.deltas);
       } else {
@@ -128,7 +126,7 @@ export default function AdminApp({ onLogout }) {
       setTimeout(() => setIsFetching(false), 400); 
     }
   };
-  
+
   useEffect(() => {
     const currentAccountExists = accounts.find(acc => acc.name === selectedCompany);
     if (!currentAccountExists) {
@@ -186,7 +184,7 @@ export default function AdminApp({ onLogout }) {
       <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} currentPage={currentPage} setCurrentPage={setCurrentPage} />
       
       <div className="main-content">
-        {/* Pass the role and onLogout prop down to Header */}
+        {/* pass the role and on Logout prop down to header */}
         {currentPage !== 'present' && <Header role="admin" onLogout={onLogout} />}
         
         <main className="content-area">

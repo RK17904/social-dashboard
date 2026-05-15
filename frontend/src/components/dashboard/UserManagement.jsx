@@ -9,7 +9,7 @@ export default function UserManagement({ onActivity }) {
   const [toast, setToast] = useState(null);
   const [formData, setFormData] = useState({ id: null, name: '', email: '', role: 'user', password: '' });
 
-  // Fetch data when component loads
+  //components loads- fetch data
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -50,7 +50,7 @@ export default function UserManagement({ onActivity }) {
         setUsers(users.filter(u => u.id !== id));
         showToast("User deleted successfully.");
         
-        // NEW: Log the deletion!
+        //logs- deletion 
         if (onActivity) onActivity('team', 'User Access Revoked', `An account was permanently removed from the system.`, 'info');
         
       } catch (error) {
@@ -72,7 +72,7 @@ export default function UserManagement({ onActivity }) {
         setUsers([...users, response.data]);
         showToast("New user created successfully.");
         
-        // NEW: Log the creation!
+        //logs- creation
         if (onActivity) onActivity('team', 'New User Registered', `Granted ${formData.role} access to ${formData.name} (${formData.email}).`, 'success');
         
       } else {
@@ -80,7 +80,7 @@ export default function UserManagement({ onActivity }) {
         setUsers(users.map(u => (u.id === formData.id ? response.data : u)));
         showToast("User updated successfully.");
         
-        // NEW: Log the edit!
+        //logs- updates
         if (onActivity) onActivity('team', 'User Profile Updated', `Modified access details for ${formData.name}.`, 'info');
       }
       setIsModalOpen(false);
@@ -90,7 +90,7 @@ export default function UserManagement({ onActivity }) {
     }
   };
 
-  // SEPARATE USERS BY ROLE
+  //sepatate user by roles
   const admins = users.filter(u => u.role === 'admin');
   const standardUsers = users.filter(u => u.role === 'user');
 
@@ -117,9 +117,7 @@ export default function UserManagement({ onActivity }) {
         </button>
       </div>
 
-      {/* =========================================
-          TABLE 1: ADMINISTRATORS
-          ========================================= */}
+      {/* admin table */}
       <h3 style={{ color: 'var(--text-primary)', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '8px' }}>
         <Shield size={20} color="var(--accent-primary)" /> Administrators
       </h3>
@@ -152,9 +150,7 @@ export default function UserManagement({ onActivity }) {
         </table>
       </div>
 
-      {/* =========================================
-          TABLE 2: STANDARD USERS
-          ========================================= */}
+      {/* user table */}
       <h3 style={{ color: 'var(--text-primary)', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '8px' }}>
         <User size={20} color="#10B981" /> Standard Users
       </h3>
@@ -192,14 +188,12 @@ export default function UserManagement({ onActivity }) {
         </table>
       </div>
 
-      {/* =========================================
-          THE ADD/EDIT MODAL (STYLED LIKE YOUR SKETCH)
-          ========================================= */}
+      {/* add edit model */}
       {isModalOpen && (
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
           <div className="animation-slideDown" style={{ backgroundColor: '#FFFFFF', padding: '35px', borderRadius: '16px', width: '100%', maxWidth: '420px', boxShadow: '0 25px 50px rgba(0,0,0,0.2)', position: 'relative' }}>
             
-            {/* THE REQUESTED CLOSE ICON */}
+            {/* close icons */}
             <button 
               onClick={() => setIsModalOpen(false)} 
               style={{ position: 'absolute', top: '20px', right: '20px', background: 'transparent', border: 'none', color: '#9CA3AF', cursor: 'pointer', padding: '5px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -213,7 +207,7 @@ export default function UserManagement({ onActivity }) {
 
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               
-              {/* Full Name */}
+              {/* full name */}
               <div>
                 <label style={{ display: 'block', color: '#8B94A6', fontSize: '0.85rem', fontWeight: '600', marginBottom: '8px' }}>Full Name</label>
                 <div style={{ position: 'relative' }}>
@@ -222,7 +216,7 @@ export default function UserManagement({ onActivity }) {
                 </div>
               </div>
 
-              {/* Email Address */}
+              {/* email address */}
               <div>
                 <label style={{ display: 'block', color: '#8B94A6', fontSize: '0.85rem', fontWeight: '600', marginBottom: '8px' }}>Email Address</label>
                 <div style={{ position: 'relative' }}>
@@ -231,7 +225,7 @@ export default function UserManagement({ onActivity }) {
                 </div>
               </div>
 
-              {/* Password */}
+              {/* password */}
               <div>
                 <label style={{ display: 'block', color: '#8B94A6', fontSize: '0.85rem', fontWeight: '600', marginBottom: '8px' }}>Password</label>
                 <div style={{ position: 'relative' }}>
@@ -240,7 +234,7 @@ export default function UserManagement({ onActivity }) {
                 </div>
               </div>
 
-              {/* Account Role (Side-by-Side as sketched) */}
+              {/* account role */}
               <div>
                 <label style={{ display: 'block', color: '#8B94A6', fontSize: '0.85rem', fontWeight: '600', marginBottom: '8px' }}>Account Role</label>
                 <div style={{ display: 'flex', gap: '15px' }}>
@@ -251,7 +245,7 @@ export default function UserManagement({ onActivity }) {
                     <span style={{ color: '#1F2937', fontSize: '0.95rem', fontWeight: '500' }}>User</span>
                   </label>
                   
-                  {/* Admin Toggle */}
+                  {/* admin toggle */}
                   <label style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', border: `1px solid ${formData.role === 'admin' ? '#7052FF' : '#E5E7EB'}`, borderRadius: '8px', cursor: 'pointer', backgroundColor: '#FFFFFF' }}>
                     <input type="radio" name="role" value="admin" checked={formData.role === 'admin'} onChange={() => setFormData({...formData, role: 'admin'})} style={{ accentColor: '#7052FF', width: '16px', height: '16px', margin: 0 }} />
                     <Shield size={18} color={formData.role === 'admin' ? '#1F2937' : '#9CA3AF'} /> 
@@ -260,7 +254,7 @@ export default function UserManagement({ onActivity }) {
                 </div>
               </div>
 
-              {/* Submit Button */}
+              {/*submit button */}
               <button type="submit" style={{ width: '100%', padding: '14px', backgroundColor: '#7052FF', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '1rem', cursor: 'pointer', marginTop: '10px' }}>
                 {modalMode === 'add' ? 'Create Account' : 'Save Changes'}
               </button>
@@ -269,7 +263,7 @@ export default function UserManagement({ onActivity }) {
         </div>
       )}
 
-      {/* TOAST NOTIFICATION */}
+      {/* tost notification */}
       {toast && (
         <div className="toast-container">
           <span style={{ fontWeight: '600' }}><CheckCircle size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '5px' }}/> Success!</span>

@@ -1,11 +1,10 @@
-// frontend/src/components/DataManager.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export default function DataManager() {
     const [records, setRecords] = useState([]);
 
-    // 1. Fetch data from Neon (You will need a GET route on your backend for this)
+    //fetch data from sever
     const fetchRecords = async () => {
         try {
             const response = await axios.get('http://localhost:5000/api/metrics');
@@ -19,9 +18,9 @@ export default function DataManager() {
         fetchRecords();
     }, []);
 
-    // 2. Handle the Delete action
+    //handle delete
     const handleDelete = async (dateStr) => {
-        // Format the date so Postgres understands it
+        // Format the dates
         const formattedDate = new Date(dateStr).toISOString().split('T')[0];
         
         if (window.confirm(`Are you sure you want to delete data for ${formattedDate}?`)) {

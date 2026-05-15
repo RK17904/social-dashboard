@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
-// 1. POST: Upload Data with Company & Platform
+//upload data with company platform
 router.post('/', async (req, res) => {
     const { metricType, company, platform, data } = req.body; 
-    let rowsProcessed = 0; // Let's track if we actually do any work!
+    let rowsProcessed = 0; 
 
     try {
         await pool.query('BEGIN');
         
         for (const row of data) {
-            // SMARTER PARSING: Look for variations of the word Date
+            //look for variations of the word Date
             const dateStr = row['Date'] || row['date'] || row['Date '] || row['Day']; 
             
             if (!dateStr) {
@@ -19,8 +19,8 @@ router.post('/', async (req, res) => {
                 continue; 
             }
 
-            // SMARTER PARSING: Look for the metric value
-            // We added row['Primary'] here! pre-proccessor
+            //look for the metric value
+            //row['Primary']- pre-proccessor
             const valueStr = row['Value'] || row['value'] || row[metricType] || row['Profile Visits'] || row['Primary'];            const value = parseInt(valueStr) || 0; 
 
             const query = `
@@ -30,10 +30,10 @@ router.post('/', async (req, res) => {
                 DO UPDATE SET ${metricType} = EXCLUDED.${metricType};
             `;
             await pool.query(query, [company, platform, dateStr, value]);
-            rowsProcessed++; // Successfully queued a row!
+            rowsProcessed++; //successfully queued a row
         }
 
-        // If we finished the loop but did 0 work, throw an error!
+        //if finished the loop but did 0 work, throw an error
         if (rowsProcessed === 0) {
             await pool.query('ROLLBACK');
             console.error("Upload Failed: No valid 'Date' columns found in the CSV.");
@@ -51,30 +51,30 @@ router.post('/', async (req, res) => {
     }
 });
 
-// 2. GET: Dashboard Totals AND Deltas (FILTERED)
+//GET: Dashboard Totals and Deltas (filtered)
 router.get('/totals', async (req, res) => {
     const { company, platform, startDate, endDate } = req.query; 
 
     try {
-        // --- A. CALCULATE DATES FOR THE PREVIOUS PERIOD ---
+        // -- A.calculates the dates for previous period ---
         const start = new Date(startDate);
         const end = new Date(endDate);
         
-        // Find how many days they selected
+        //find how many days they selected
         const diffTime = Math.abs(end - start);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-        // Shift dates back by that exact amount of days
+        //shift dates back by that exact amount of days
         const prevEnd = new Date(start);
         prevEnd.setDate(prevEnd.getDate() - 1);
         const prevStart = new Date(prevEnd);
         prevStart.setDate(prevStart.getDate() - diffDays);
 
-        // Format for PostgreSQL (YYYY-MM-DD)
+        //format for PostgreSQL (YYYY-MM-DD)
         const prevStartStr = prevStart.toISOString().split('T')[0];
         const prevEndStr = prevEnd.toISOString().split('T')[0];
 
-        // --- B. QUERY CURRENT PERIOD ---
+        // --- B.query current period ---
         const query = `
             SELECT 
                 COALESCE(SUM(views), 0) as views,
@@ -89,16 +89,16 @@ router.get('/totals', async (req, res) => {
         const currentRes = await pool.query(query, [company, platform, startDate, endDate]);
         const current = currentRes.rows[0];
 
-        // --- C. QUERY PREVIOUS PERIOD ---
+        // --- C.qurey previos period ---
         const prevRes = await pool.query(query, [company, platform, prevStartStr, prevEndStr]);
         const prev = prevRes.rows[0];
 
-        // --- D. CALCULATE PERCENTAGE CHANGE (DELTAS) ---
+        // --- D. calculate precentages ---
         const calcDelta = (currStr, prevStr) => {
             const c = parseFloat(currStr) || 0;
             const p = parseFloat(prevStr) || 0;
             if (p === 0 && c === 0) return 0;
-            if (p === 0) return 100; // 100% growth if previous was 0!
+            if (p === 0) return 100; // 100% growth if previous was 0
             return Math.round(((c - p) / p) * 100);
         };
 
@@ -110,14 +110,14 @@ router.get('/totals', async (req, res) => {
             interactions: calcDelta(current.interactions, prev.interactions)
         };
 
-        // --- E. SEND EVERYTHING TO REACT ---
+        // --- E.send to the react front end ---
         res.status(200).json({
             total_views: current.views,
             total_visits: current.visits,
             total_viewers: current.viewers,
             followers: current.followers,
             interactions: current.interactions,
-            deltas: deltas // <-- We are sending the real math here!
+            deltas: deltas 
         });
 
     } catch (error) {
@@ -126,8 +126,8 @@ router.get('/totals', async (req, res) => {
     }
 });
 
-// 3. GET: Time-Series Data for the Graphs (FILTERED)
-// 3. GET: Time-Series Data for the Graphs (FILTERED BY DATE)
+//GET: Time-Series Data for the Graphs (filtered)
+//GET: Time-Series Data for the Graphs (filtered by date)
 router.get('/charts', async (req, res) => {
     // 1. Catch the dates sent by your React Calendar
     const { company, platform, startDate, endDate } = req.query;
@@ -146,7 +146,7 @@ router.get('/charts', async (req, res) => {
             ORDER BY recorded_date ASC 
         `;
         
-        // 3. Pass the dates into the SQL query
+        //pass the dates into the SQL query
         const result = await pool.query(query, [company, platform, startDate, endDate]);
         res.status(200).json(result.rows);
         
@@ -156,15 +156,15 @@ router.get('/charts', async (req, res) => {
     }
 });
 
-// 4. GET: Pie Chart Breakdown (Dynamic Demo Data)
+//GET: Pie Chart Breakdown (dynamic beta)
 router.get('/pie', async (req, res) => {
     const { company, platform } = req.query;
     try {
         // First, check if this account even has data
         const check = await pool.query('SELECT COUNT(*) FROM account_stats WHERE company = $1 AND platform = $2', [company, platform]);
-        if (parseInt(check.rows[0].count) === 0) return res.status(200).json([]); // Return empty if no data!
+        if (parseInt(check.rows[0].count) === 0) return res.status(200).json([]); // return empty if no data
 
-        // If it has data, return a cool platform-specific breakdown for the demo
+        //return a cool platform-specific breakdown
         let pieData = [];
         if (platform === 'Instagram') pieData = [{ name: 'Reels', value: 45 }, { name: 'Static Posts', value: 25 }, { name: 'Carousels', value: 30 }];
         else if (platform === 'Facebook') pieData = [{ name: 'Videos', value: 50 }, { name: 'Static Posts', value: 30 }, { name: 'Links', value: 20 }];

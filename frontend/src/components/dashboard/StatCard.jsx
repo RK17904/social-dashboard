@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { TrendingUp, TrendingDown } from 'lucide-react'; // We need these icons for the arrows!
+import { TrendingUp, TrendingDown } from 'lucide-react'; 
 
 export default function StatCard({ title, targetNumber, delta = 0 }) {
   const [count, setCount] = useState(0);
@@ -67,7 +67,7 @@ export default function StatCard({ title, targetNumber, delta = 0 }) {
           {formatNumber(count)}
         </h2>
         
-        {/* THE DELTA PERCENTAGE INDICATOR */}
+        {/*delta percentage indicator*/}
         {delta !== 0 && (
           <div style={{ 
             display: 'flex', 

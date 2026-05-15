@@ -2,26 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { LogOut, Moon, Sun } from 'lucide-react';
 
 export default function Header({ role, onLogout }) {
-  // --- REAL-TIME CLOCK LOGIC ---
+  //clock logic
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
-    // Update the clock every single second
+    //update clock logic
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
-  // Format the date exactly like your screenshot (e.g., "Wednesday, May 13, 2026")
+  //date format
   const dateString = time.toLocaleDateString('en-US', { 
     weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' 
   });
   
-  // Format the time exactly like your screenshot (e.g., "01:00 PM")
+  //format time
   const timeString = time.toLocaleTimeString('en-US', { 
     hour: '2-digit', minute: '2-digit' 
   });
 
-  // --- HEADER THEME TOGGLE (Optional bonus to make that moon icon work!) ---
+  //header theme
   const [theme, setTheme] = useState(() => document.documentElement.getAttribute('data-theme') || 'light');
   
   const toggleTheme = () => {
@@ -41,7 +41,7 @@ export default function Header({ role, onLogout }) {
       transition: 'all 0.3s ease'
     }}>
       
-      {/* LEFT SECTION: Brand Titles */}
+      {/*left section- brand section */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
         <h1 style={{ 
           color: 'var(--accent-primary)', 
@@ -63,10 +63,10 @@ export default function Header({ role, onLogout }) {
         </p>
       </div>
 
-      {/* RIGHT SECTION: Controls & Profile */}
+      {/* right section- controls , profile */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '25px' }}>
         
-        {/* 1. Live Date & Time */}
+        {/* live date & time */}
         <div style={{ textAlign: 'right' }}>
           <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: '500' }}>
             {dateString}
@@ -76,7 +76,7 @@ export default function Header({ role, onLogout }) {
           </div>
         </div>
 
-        {/* 2. Theme Toggle Icon */}
+        {/* theme toggle */}
         <button 
           onClick={toggleTheme} 
           title="Toggle Theme"
@@ -91,7 +91,7 @@ export default function Header({ role, onLogout }) {
           {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
         </button>
 
-        {/* 3. User Profile Badge */}
+        {/* user profile badge*/}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{ 
             width: '38px', height: '38px', borderRadius: '50%', 
@@ -99,7 +99,7 @@ export default function Header({ role, onLogout }) {
             display: 'flex', alignItems: 'center', justifyContent: 'center', 
             fontWeight: 'bold', fontSize: '1.1rem', boxShadow: '0 4px 10px rgba(112, 82, 255, 0.3)'
           }}>
-            {/* Show "A" for Admin, "U" for User */}
+            {/*A -admin, B- user*/}
             {role === 'admin' ? 'A' : 'U'}
           </div>
           <span style={{ color: 'var(--text-primary)', fontWeight: '700', fontSize: '1rem' }}>
@@ -107,7 +107,7 @@ export default function Header({ role, onLogout }) {
           </span>
         </div>
 
-        {/* 4. Logout Icon */}
+        {/* logout icon */}
         <button 
           onClick={onLogout} 
           title="Logout" 

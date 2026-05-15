@@ -1,7 +1,7 @@
 import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-// A Reusable Component for a Single Mini-Chart
+//reusable component fot mini charts 
 const SingleChart = ({ data, dataKey, color, title }) => (
   <div style={{ 
     backgroundColor: 'var(--bg-card)', 
@@ -36,7 +36,7 @@ const SingleChart = ({ data, dataKey, color, title }) => (
   </div>
 );
 
-// The Main Component that renders all 3 side-by-side
+//main component that renders all 3 side by side 
 export default function MainCharts({ chartData }) {
   if (!chartData || chartData.length === 0) {
     return (

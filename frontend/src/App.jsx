@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import AdminApp from './AdminApp';
 import UserApp from './UserApp';
-import Login from './pages/Login'; // Import the new Login page
+import Login from './pages/Login'; 
 
 export default function App() {
-  // New state to track if someone has successfully logged in
+  //state track after successful login
   const [isAuthenticated, setIsAuthenticated] = useState(() => localStorage.getItem('auth') === 'true');
   const [role, setRole] = useState(() => localStorage.getItem('role') || null);  
 
   const handleLogin = (assignedRole) => {
     setRole(assignedRole);
     setIsAuthenticated(true);
-    // Save to browser memory
+    //save to browser memory
     localStorage.setItem('auth', 'true');
     localStorage.setItem('role', assignedRole);
   };
@@ -19,19 +19,19 @@ export default function App() {
   const handleLogout = () => {
     setIsAuthenticated(false);
     setRole(null);
-    // Erase from browser memory
+    //erase from browser memory
     localStorage.removeItem('auth');
     localStorage.removeItem('role');
   };
 
-  // 1. THE AUTHENTICATION WALL
-  // If they are not logged in, they ONLY see the Login screen.
+  //THE AUTHENTICATION WALL
+  //not logged in, they only see the Login screen.
   if (!isAuthenticated) {
     return <Login onLogin={handleLogin} />;
   }
 
-  // 2. THE ROUTER
-  // Once logged in, route them to the correct dashboard
+  //THE ROUTER
+  //Once logged in, route them to the correct dashboard
   return (
     <>
       {role === 'admin' ? <AdminApp onLogout={handleLogout} /> : <UserApp onLogout={handleLogout} />}

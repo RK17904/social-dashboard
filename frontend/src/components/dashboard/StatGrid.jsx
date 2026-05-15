@@ -9,7 +9,6 @@ export default function StatGrid({ data }) {
       gap: '20px', 
       marginBottom: '30px' 
     }}>
-      {/* We use data?.views || 0 so it always has a fallback number to show! */}
       <StatCard 
         title="Total Views" 
         targetNumber={data?.views || 0} 
